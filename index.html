@@ -1,200 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Private Game Night – Dual Mode</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
-
-  :root {
-    --bg-color: #121010;
-    --card-bg: rgba(28, 24, 24, 0.7);
-    --border-color: rgba(212, 163, 115, 0.15);
-    --border-hover: rgba(212, 163, 115, 0.4);
-    --text-primary: #f5f0eb;
-    --text-secondary: #b8aba2;
-    --accent-gold: #d4a373;
-  }
-
-  body {
-    margin: 0;
-    font-family: 'Plus Jakarta+Sans', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-primary);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-    box-sizing: border-box;
-  }
-
-  .wrapper {
-    width: 100%;
-    max-width: 1100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  header {
-    text-align: center;
-    margin-bottom: 50px;
-  }
-
-  h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.8rem;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    margin: 0 0 12px 0;
-    color: var(--text-primary);
-  }
-
-  .subtitle {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    font-weight: 300;
-  }
-
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    width: 100%;
-  }
-
-  /* Make the first two cards on the bottom row center nicely or span */
-  .game-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .game-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--border-hover);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-  }
-
-  .card-image-wrapper {
-    width: 100%;
-    height: 180px;
-    overflow: hidden;
-  }
-
-  .game-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.9) contrast(1.05);
-    transition: transform 0.5s ease;
-  }
-
-  .game-card:hover img {
-    transform: scale(1.04);
-  }
-
-  .game-title {
-    padding: 20px 16px;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    color: var(--text-primary);
-    background: transparent;
-  }
-
-  /* Spanning layout adjustments for 5 cards */
-  .game-card:nth-child(4) {
-    grid-column: 1 / 2;
-  }
-  .game-card:nth-child(5) {
-    grid-column: 3 / 4;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Private Game Night</title>
   
-  .bottom-row-wrapper {
-    display: contents;
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  @media (max-width: 900px) {
-    .grid-container {
-      grid-template-columns: repeat(2, 1fr);
+  <style>
+    :root {
+      --bg-dark: #0f0812;
+      --bg-surface: rgba(255, 255, 255, 0.03);
+      --bg-surface-hover: rgba(255, 255, 255, 0.07);
+      --border-subtle: rgba(224, 122, 95, 0.15);
+      --border-glow: rgba(224, 122, 95, 0.4);
+      --text-main: #f4e9dc;
+      --text-muted: #a698a8;
+      --accent-warm: #e07a5f;
+      --accent-rose: #c86b7b;
+      --accent-gold: #d4a373;
     }
-    .game-card:nth-child(4),
-    .game-card:nth-child(5) {
-      grid-column: auto;
-    }
-  }
 
-  @media (max-width: 600px) {
-    .grid-container {
-      grid-template-columns: 1fr;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(200, 107, 123, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(224, 122, 95, 0.06) 0%, transparent 45%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      line-height: 1.6;
+    }
+
+    /* Header Section */
+    .header-container {
+      text-align: center;
+      max-width: 600px;
+      margin-bottom: 56px;
+    }
+
+    .tagline {
+      font-size: 0.8rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      font-weight: 500;
+      margin-bottom: 12px;
+      opacity: 0.9;
+    }
+
     h1 {
-      font-size: 2.2rem;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: var(--text-main);
+      margin-bottom: 12px;
     }
-  }
-</style>
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    /* Grid Layout */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      width: 100%;
+      max-width: 1080px;
+    }
+
+    /* Card Styling */
+    .game-card {
+      position: relative;
+      border-radius: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--border-glow);
+      background: var(--bg-surface-hover);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 
+                  0 0 30px 0 rgba(224, 122, 95, 0.12);
+    }
+
+    .card-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+    }
+
+    .game-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.85) brightness(0.8);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    }
+
+    .game-card:hover img {
+      transform: scale(1.05);
+      filter: saturate(1) brightness(0.9);
+    }
+
+    .card-content {
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(15, 8, 18, 0.4) 0%, rgba(15, 8, 18, 0.8) 100%);
+      flex-grow: 1;
+    }
+
+    .game-title {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-main);
+      letter-spacing: 0.5px;
+    }
+
+    .card-arrow {
+      color: var(--accent-warm);
+      font-size: 1.2rem;
+      opacity: 0.5;
+      transform: translateX(-4px);
+      transition: all 0.3s ease;
+    }
+
+    .game-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Grid Layout Ratios */
+    .card-featured {
+      grid-column: span 12;
+    }
+
+    .card-featured .card-image-wrapper {
+      height: 320px;
+    }
+
+    .card-featured .game-title {
+      font-size: 1.35rem;
+      font-family: 'Cinzel', serif;
+    }
+
+    .card-half {
+      grid-column: span 6;
+    }
+
+    .card-half-small {
+      grid-column: span 6;
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .card-half-small:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border-subtle);
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      border: 1px solid rgba(212, 163, 115, 0.3);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .game-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card-featured .card-image-wrapper {
+        height: 220px;
+      }
+      
+      .header-container {
+        margin-bottom: 36px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="wrapper">
-  <header>
-    <h1>Private Game Night</h1>
-    <div class="subtitle">SRSP &amp; SRDP &bull; Gender-Aware &bull; Consent First</div>
+  <header class="header-container">
+    <div class="tagline">SRSP & SRDP Modes</div>
+    <h1>PRIVATE GAME NIGHT</h1>
+    <p class="subtitle">Select an experience to begin your evening</p>
   </header>
 
-  <div class="grid-container">
-    <div class="game-card" onclick="go('Truthdare.html')">
+  <main class="game-grid">
+    
+    <!-- Active Game 1: Truth or Dare (Featured Hero Card) -->
+    <div class="game-card card-featured" onclick="go('Truthdare.html')">
       <div class="card-image-wrapper">
-        <img src="https://www.wikihow.com/images/thumb/1/1e/Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg/v4-728px-Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg" alt="Truth or Dare">
+        <img src="https://www.wikihow.com/images/thumb/1/1e/Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg/v4-728px-Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg" alt="Truth or Dare Ladder">
       </div>
-      <div class="game-title">Truth or Dare Ladder</div>
+      <div class="card-content">
+        <span class="game-title">Truth or Dare Ladder</span>
+        <span class="card-arrow">&rarr;</span>
+      </div>
     </div>
 
-    <div class="game-card" onclick="go('dice.html')">
+    <!-- Active Game 2: Desire Dice -->
+    <div class="game-card card-half" onclick="go('dice.html')">
       <div class="card-image-wrapper">
         <img src="https://www.girlschase.com/images/sex-tactics.jpg" alt="Desire Dice">
       </div>
-      <div class="game-title">Desire Dice</div>
-    </div>
-
-    <div class="game-card" onclick="go('connection.html')">
-      <div class="card-image-wrapper">
-        <img src="https://www.developgoodhabits.com/wp-content/uploads/2020/02/questions-couples-fantasy.png" alt="Connection Questions">
+      <div class="card-content">
+        <span class="game-title">Desire Dice</span>
+        <span class="card-arrow">&rarr;</span>
       </div>
-      <div class="game-title">Connection Questions</div>
     </div>
 
-    <div class="game-card" onclick="go('secret.html')">
+    <!-- Active Game 3: Secret Challenge -->
+    <div class="game-card card-half" onclick="go('secret.html')">
       <div class="card-image-wrapper">
         <img src="https://i.etsystatic.com/62191748/r/il/870382/7303613538/il_fullxfull.7303613538_m7zg.jpg" alt="Secret Challenge">
       </div>
-      <div class="game-title">Secret Challenge</div>
+      <div class="card-content">
+        <span class="game-title">Secret Challenge</span>
+        <span class="card-arrow">&rarr;</span>
+      </div>
     </div>
 
-    <div class="game-card" onclick="go('tempo.html')">
+    <!-- Locked / In Development: Connection Questions -->
+    <div class="game-card card-half-small">
+      <div class="card-image-wrapper">
+        <img src="https://www.developgoodhabits.com/wp-content/uploads/2020/02/questions-couples-fantasy.png" alt="Connection Questions">
+      </div>
+      <div class="card-content">
+        <span class="game-title">Connection Questions</span>
+        <span class="status-badge">In Development</span>
+      </div>
+    </div>
+
+    <!-- Locked / In Development: Tempo Game -->
+    <div class="game-card card-half-small">
       <div class="card-image-wrapper">
         <img src="https://helios-i.mashable.com/imagery/articles/06vhR6V3ub2Qfp3quuSkbuo/hero-image.fill.size_1248x702.v1623389712.jpg" alt="Tempo Game">
       </div>
-      <div class="game-title">Tempo Game</div>
+      <div class="card-content">
+        <span class="game-title">Tempo Game</span>
+        <span class="status-badge">In Development</span>
+      </div>
     </div>
-  </div>
-</div>
 
-<script>
-function go(page) { window.location.href = page; }
-</script>
+  </main>
+
+  <script>
+    function go(page) {
+      window.location.href = page;
+    }
+  </script>
+
 </body>
 </html>
