@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Private Game Night</title>
-
+<title>Private Game Night – Dual Mode</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
 
   body {
     margin: 0;
     font-family: 'Cormorant Garamond', serif;
-    background: linear-gradient(135deg, #2c003e, #6a1b9a, #ab47bc);
-    color: #f5e6ff;
+    background: linear-gradient(160deg, #0d0015, #1a0029, #2a003f);
+    color: #ffe6f2;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -22,131 +21,112 @@
     overflow-x: hidden;
   }
 
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 15% 80%, rgba(255, 45, 149, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(180, 0, 120, 0.15) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
   .container {
     position: relative;
     width: 100%;
     max-width: 900px;
-    aspect-ratio: 1 / 1.2;
+    aspect-ratio: 1 / 1.15;
+    z-index: 1;
   }
 
   h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 3rem;
+    font-size: 2.7rem;
     text-align: center;
-    margin-bottom: 80px;
-    color: #ffd1dc;
-    text-shadow: 0 2px 10px rgba(255, 105, 180, 0.4);
+    margin-bottom: 6px;
+    color: #ffd1a0;
+    text-shadow: 0 0 25px rgba(255, 45, 149, 0.45);
     letter-spacing: 2px;
     position: absolute;
-    top: -60px;
+    top: -75px;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    z-index: 10;
+  }
+
+  .subtitle {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    font-size: 1.05rem;
+    color: #ff9ec8;
+    letter-spacing: 1px;
   }
 
   .game-card {
     position: absolute;
-    width: 260px;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    border-radius: 24px;
+    width: 255px;
+    background: rgba(25, 5, 35, 0.85);
+    backdrop-filter: blur(14px);
+    border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 105, 180, 0.3);
-    transition: transform 0.5s ease, box-shadow 0.5s ease, z-index 0.4s;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255, 45, 149, 0.3);
+    transition: transform 0.45s ease, box-shadow 0.45s ease, z-index 0.3s;
     cursor: pointer;
   }
 
   .game-card:hover {
-    transform: scale(1.15) !important;
-    box-shadow: 0 25px 70px rgba(255, 20, 147, 0.7);
+    transform: scale(1.12) !important;
+    box-shadow: 0 20px 60px rgba(255, 45, 149, 0.55);
     z-index: 30 !important;
   }
 
   .game-card img {
     width: 100%;
-    height: 220px;
+    height: 200px;
     object-fit: cover;
-    filter: brightness(0.9) contrast(1.1);
+    filter: brightness(0.85) contrast(1.1);
   }
 
   .game-title {
-    padding: 20px;
+    padding: 16px;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 600;
-    background: linear-gradient(135deg, #ff69b4, #c71585);
+    background: linear-gradient(135deg, #ff2d95, #c4007a);
     color: white;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
   }
 
-  /* Base positions (same as before) */
-  #center {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    z-index: 5;
-  }
+  #center { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 290px; z-index: 5; }
+  #top { top: 4%; left: 50%; transform: translateX(-50%); z-index: 4; }
+  #bottom { bottom: 4%; left: 50%; transform: translateX(-50%); z-index: 4; }
+  #left { left: 2%; top: 50%; transform: translateY(-50%); z-index: 4; }
+  #right { right: 2%; top: 50%; transform: translateY(-50%); z-index: 4; }
 
-  #top {
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 4;
-  }
-
-  #bottom {
-    bottom: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 4;
-  }
-
-  #left {
-    left: 2%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 4;
-  }
-
-  #right {
-    right: 2%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 4;
-  }
-
-  /* Slow floating animation for all cards */
   @keyframes float {
-    0% { transform: translate(-50%, -50%) translateY(0px); } /* center uses different base */
-    50% { transform: translate(-50%, -50%) translateY(-20px); }
-    100% { transform: translate(-50%, -50%) translateY(0px); }
+    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+    50% { transform: translate(-50%, -50%) translateY(-16px); }
   }
-
   @keyframes float-top {
-    0% { transform: translateX(-50%) translateY(0px); }
-    50% { transform: translateX(-50%) translateY(-15px); }
-    100% { transform: translateX(-50%) translateY(0px); }
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-12px); }
   }
-
   @keyframes float-bottom {
-    0% { transform: translateX(-50%) translateY(0px); }
-    50% { transform: translateX(-50%) translateY(15px); }
-    100% { transform: translateX(-50%) translateY(0px); }
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(12px); }
   }
-
   @keyframes float-left {
-    0% { transform: translateY(-50%) translateX(0px); }
-    50% { transform: translateY(-50%) translateX(-12px); }
-    100% { transform: translateY(-50%) translateX(0px); }
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(-10px); }
   }
-
   @keyframes float-right {
-    0% { transform: translateY(-50%) translateX(0px); }
-    50% { transform: translateY(-50%) translateX(12px); }
-    100% { transform: translateY(-50%) translateX(0px); }
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(10px); }
   }
 
   #center { animation: float 8s ease-in-out infinite; }
@@ -155,73 +135,47 @@
   #left { animation: float-left 9.5s ease-in-out infinite; }
   #right { animation: float-right 8.5s ease-in-out infinite; }
 
-  /* Mobile: Stack vertically (no animation needed) */
   @media (max-width: 900px) {
-    .container {
-      aspect-ratio: auto;
-      height: auto;
-    }
-    h1 {
-      position: static;
-      transform: none;
-      margin-bottom: 40px;
-      font-size: 2.5rem;
-    }
+    .container { aspect-ratio: auto; height: auto; }
+    h1 { position: static; transform: none; margin-bottom: 6px; font-size: 2.2rem; }
+    .subtitle { position: static; transform: none; margin-bottom: 28px; }
     .game-card {
       position: static;
       width: 90%;
       max-width: 320px;
-      margin: 30px auto;
+      margin: 28px auto;
       transform: none !important;
       animation: none !important;
     }
-    #center {
-      width: 90%;
-      max-width: 340px;
-    }
-  }
-
-  /* Sparkles */
-  body::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.15) 0%, transparent 30%),
-                radial-gradient(circle at 80% 20%, rgba(186, 85, 211, 0.15) 0%, transparent 30%);
-    pointer-events: none;
+    #center { width: 90%; max-width: 340px; }
   }
 </style>
 </head>
-
 <body>
 <div class="container">
   <h1>Private Game Night</h1>
+  <div class="subtitle">SRSP &amp; SRDP • Gender-Aware • Consent First</div>
 
-  <!-- Top: Truth or Dare Ladder -->
   <div class="game-card" id="top" onclick="go('Truthdare.html')">
-    <img src="https://www.wikihow.com/images/thumb/1/1e/Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg/v4-728px-Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg" alt="Sensual Truth or Dare">
+    <img src="https://www.wikihow.com/images/thumb/1/1e/Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg/v4-728px-Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg" alt="Truth or Dare">
     <div class="game-title">Truth or Dare Ladder</div>
   </div>
 
-  <!-- Left: Desire Dice -->
   <div class="game-card" id="left" onclick="go('dice.html')">
     <img src="https://www.girlschase.com/images/sex-tactics.jpg" alt="Desire Dice">
     <div class="game-title">Desire Dice</div>
   </div>
 
-  <!-- Center: Connection Questions -->
   <div class="game-card" id="center" onclick="go('connection.html')">
     <img src="https://www.developgoodhabits.com/wp-content/uploads/2020/02/questions-couples-fantasy.png" alt="Connection Questions">
     <div class="game-title">Connection Questions</div>
   </div>
 
-  <!-- Right: Secret Challenge -->
   <div class="game-card" id="right" onclick="go('secret.html')">
     <img src="https://i.etsystatic.com/62191748/r/il/870382/7303613538/il_fullxfull.7303613538_m7zg.jpg" alt="Secret Challenge">
     <div class="game-title">Secret Challenge</div>
   </div>
 
-  <!-- Bottom: Tempo Game -->
   <div class="game-card" id="bottom" onclick="go('tempo.html')">
     <img src="https://helios-i.mashable.com/imagery/articles/06vhR6V3ub2Qfp3quuSkbuo/hero-image.fill.size_1248x702.v1623389712.jpg" alt="Tempo Game">
     <div class="game-title">Tempo Game</div>
@@ -229,9 +183,7 @@
 </div>
 
 <script>
-function go(page) {
-  window.location.href = page;
-}
+function go(page) { window.location.href = page; }
 </script>
 </body>
 </html>
