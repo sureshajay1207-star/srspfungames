@@ -1,1 +1,712 @@
-PLACEHOLDER_WILL_BE_REPLACED
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truth or Dare Ladder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
+
+  :root {
+    --bg1: #0d0015;
+    --bg2: #1a0029;
+    --accent: #ff2d95;
+    --accent2: #c4007a;
+    --gold: #ffd1a0;
+    --text: #ffe6f2;
+    --card: rgba(25, 5, 35, 0.92);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Cormorant Garamond', serif;
+    background: linear-gradient(160deg, var(--bg1), var(--bg2), #2a003f);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 15% 80%, rgba(255, 45, 149, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(180, 0, 120, 0.15) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 430px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  h2 {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.3rem;
+    color: var(--gold);
+    margin: 0 0 8px;
+    text-shadow: 0 0 20px rgba(255, 45, 149, 0.4);
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #ff9ec8;
+    margin-bottom: 22px;
+    letter-spacing: 1px;
+  }
+
+  h3 {
+    text-align: center;
+    font-size: 1.25rem;
+    margin: 0 0 14px;
+    color: #ff8fb3;
+  }
+
+  .card {
+    background: var(--card);
+    backdrop-filter: blur(16px);
+    border-radius: 22px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 45, 149, 0.25);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+
+  .mode-options, .mood-options {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .mode-option, .mood-option {
+    padding: 16px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid transparent;
+  }
+
+  .mode-option:hover, .mood-option:hover {
+    background: rgba(255, 45, 149, 0.18);
+    border-color: rgba(255, 45, 149, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .mode-option.selected, .mood-option.selected {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 8px 25px rgba(255, 45, 149, 0.45);
+    border-color: transparent;
+  }
+
+  .consent-box {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: center;
+    padding: 12px;
+    background: rgba(255, 45, 149, 0.08);
+    border-radius: 14px;
+    margin-top: 12px;
+    color: #ffb6d5;
+  }
+
+  .player-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .player-row input {
+    flex: 1;
+  }
+
+  .player-row select {
+    width: 110px;
+  }
+
+  input, select {
+    padding: 13px;
+    border-radius: 14px;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ff9ec8'%3E%3Cpath d='M6 9L0 3h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 12px;
+    border-radius: 16px;
+    border: none;
+    font-size: 1.15rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 20px rgba(255, 45, 149, 0.35);
+  }
+
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(255, 45, 149, 0.5);
+  }
+
+  .secondary, .home-btn {
+    background: rgba(255,255,255,0.1);
+    box-shadow: none;
+  }
+
+  .home-btn { margin-top: 18px; font-size: 1rem; }
+
+  .hidden { display: none; }
+  .fade { animation: fadeIn 0.45s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #promptText {
+    font-size: 1.4rem;
+    line-height: 1.55;
+    text-align: center;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.95rem;
+  }
+
+  th, td {
+    padding: 10px 6px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 45, 149, 0.25);
+  }
+
+  th { color: #ff8fb3; font-weight: 600; }
+
+  .mode-badge {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ff9ec8;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .gender-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .male { background: rgba(100, 150, 255, 0.25); color: #a0c4ff; }
+  .female { background: rgba(255, 100, 180, 0.25); color: #ffb0d0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- SETUP -->
+  <div id="setup" class="fade">
+    <h2>Truth or Dare</h2>
+    <div class="subtitle">Private Game Night</div>
+
+    <div class="card">
+      <h3>Choose Mode</h3>
+      <div class="mode-options">
+        <div class="mode-option selected" data-mode="srsp">🔒 SRSP — Same Partner Only</div>
+        <div class="mode-option" data-mode="srdp">🔥 SRDP — Different Partner Allowed</div>
+      </div>
+      <div class="consent-box" id="consentText">Same room • Same partner only • No swapping</div>
+    </div>
+
+    <div class="card">
+      <h3>Choose Mood</h3>
+      <div class="mood-options">
+        <div class="mood-option selected" data-mood="casual">🟢 Casual</div>
+        <div class="mood-option" data-mood="hot">🔥 Hot</div>
+        <div class="mood-option" data-mood="wild">😈 Wild</div>
+        <div class="mood-option" data-mood="extreme">🌋 Extreme</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Participants</h3>
+      <div id="players"></div>
+      <button onclick="addPlayer()" style="margin-top:8px;background:rgba(255,255,255,0.12);box-shadow:none;">+ Add Participant</button>
+    </div>
+
+    <button onclick="startGame()">Start Game</button>
+    <button class="home-btn secondary" onclick="location.href='index.html'">← Back to Games</button>
+  </div>
+
+  <!-- TURN -->
+  <div id="turn" class="hidden fade">
+    <div class="mode-badge" id="modeBadge"></div>
+    <h3 id="turnCounter"></h3>
+    <h2 id="currentPlayer" style="font-size:1.9rem;margin-bottom:18px;"></h2>
+
+    <button onclick="choose('truth')">Truth</button>
+    <button onclick="choose('dare')">Dare</button>
+
+    <div class="card" style="margin-top:22px;">
+      <table>
+        <thead><tr><th>Name</th><th>Truth</th><th>Dare</th><th>Total</th></tr></thead>
+        <tbody id="scoreTable"></tbody>
+      </table>
+    </div>
+
+    <button class="secondary" onclick="backToSetup()">Change Settings</button>
+    <button class="home-btn secondary" onclick="location.href='index.html'">← Back to Games</button>
+  </div>
+
+  <!-- PROMPT -->
+  <div id="promptScreen" class="hidden fade">
+    <div class="mode-badge" id="modeBadge2"></div>
+    <div class="card">
+      <div id="promptText"></div>
+    </div>
+    <button onclick="nextTurn()">Next Turn</button>
+    <button class="home-btn secondary" onclick="location.href='index.html'">← Back to Games</button>
+  </div>
+
+</div>
+
+<script>
+let players = [];
+let mode = "srsp";
+let mood = "casual";
+let currentIndex = -1;
+let lastIndex = -1;
+let turnCount = 0;
+
+const prompts = {
+  srsp: {
+    truth: {
+      casual: {
+        male: [
+          "Tell your partner one small habit of hers that quietly makes you happy.",
+          "Describe a moment with your partner that made you feel emotionally close.",
+          "Say one quality of your partner that makes you trust her deeply.",
+          "Tell your partner what first attracted you to her personality.",
+          "Share one way your partner makes daily life easier for you."
+        ],
+        female: [
+          "Tell your partner one small habit of his that quietly makes you happy.",
+          "Describe a moment with your partner that made you feel emotionally close.",
+          "Say one quality of your partner that makes you trust him deeply.",
+          "Tell your partner what first attracted you to his personality.",
+          "Share one way your partner makes daily life easier for you."
+        ]
+      },
+      hot: {
+        male: [
+          "Tell your partner what kind of kiss from her makes you feel most turned on.",
+          "Describe one way your partner makes you feel desirable without even trying.",
+          "Say which part of your partner’s body you enjoy touching the most over clothes.",
+          "Tell your partner what outfit of hers you find especially sexy.",
+          "Share what kind of physical closeness with your partner you crave most."
+        ],
+        female: [
+          "Tell your partner what kind of kiss from him makes you feel most turned on.",
+          "Describe one way your partner makes you feel desirable without even trying.",
+          "Say which part of your partner’s body you enjoy touching the most over clothes.",
+          "Tell your partner what outfit of his you find especially sexy.",
+          "Share what kind of physical closeness with your partner you crave most."
+        ]
+      },
+      wild: {
+        male: [
+          "Tell your partner what part of her body you crave touching the most when you’re undressed.",
+          "Describe exactly what you love seeing when your partner starts taking her clothes off.",
+          "Tell your partner what kind of naked closeness with her excites you the fastest.",
+          "Say which part of her skin you love kissing the most and why.",
+          "Tell your partner what physical detail of hers instantly turns you on."
+        ],
+        female: [
+          "Tell your partner what part of his body you crave touching the most when you’re undressed.",
+          "Describe exactly what you love seeing when your partner starts taking his clothes off.",
+          "Tell your partner what kind of naked closeness with him excites you the fastest.",
+          "Say which part of his skin you love kissing the most and why.",
+          "Tell your partner what physical detail of his instantly turns you on."
+        ]
+      },
+      extreme: {
+        male: [
+          "Tell your partner whether you enjoy being in control or surrendering more, and why.",
+          "Describe how it feels when your partner takes complete control of the moment.",
+          "Tell your partner what kind of anticipation from her drives you the most insane.",
+          "Describe the most intense physical sensation you want from her right now.",
+          "Tell your partner exactly how you want her to use her mouth on you."
+        ],
+        female: [
+          "Tell your partner whether you enjoy being in control or surrendering more, and why.",
+          "Describe how it feels when your partner takes complete control of the moment.",
+          "Tell your partner what kind of anticipation from him drives you the most insane.",
+          "Describe the most intense physical sensation you want from him right now.",
+          "Tell your partner exactly how you want him to use his mouth on you."
+        ]
+      }
+    },
+    dare: {
+      casual: {
+        male: [
+          "Hold your partner’s hand for the next 60 seconds without letting go.",
+          "Give your partner a genuine 10-second hug right now.",
+          "Whisper one sincere compliment into her ear.",
+          "Kiss your partner softly on the cheek.",
+          "Look into her eyes for 15 seconds without speaking."
+        ],
+        female: [
+          "Hold your partner’s hand for the next 60 seconds without letting go.",
+          "Give your partner a genuine 10-second hug right now.",
+          "Whisper one sincere compliment into his ear.",
+          "Kiss your partner softly on the cheek.",
+          "Look into his eyes for 15 seconds without speaking."
+        ]
+      },
+      hot: {
+        male: [
+          "Kiss your partner slowly on the neck for 15 seconds.",
+          "Run your fingers lightly along her inner thigh (over clothes).",
+          "Pull her close and hold her tightly for 20 seconds.",
+          "Bite her lower lip gently then kiss her.",
+          "Whisper something flirty into her ear while touching her waist."
+        ],
+        female: [
+          "Kiss your partner slowly on the neck for 15 seconds.",
+          "Run your fingers lightly along his inner thigh (over clothes).",
+          "Pull him close and hold him tightly for 20 seconds.",
+          "Bite his lower lip gently then kiss him.",
+          "Whisper something flirty into his ear while touching his waist."
+        ]
+      },
+      wild: {
+        male: [
+          "Remove one item of clothing from your partner right now.",
+          "Kiss and lick her neck while sliding your hand under her clothes.",
+          "Press your body fully against her and grind slowly for 20 seconds.",
+          "Take her hand and place it where you want it most.",
+          "Bite and suck on her neck hard enough to leave a mark."
+        ],
+        female: [
+          "Remove one item of clothing from your partner right now.",
+          "Kiss and lick his neck while sliding your hand under his clothes.",
+          "Press your body fully against him and grind slowly for 20 seconds.",
+          "Take his hand and place it where you want it most.",
+          "Bite and suck on his neck hard enough to leave a mark."
+        ]
+      },
+      extreme: {
+        male: [
+          "Remove two pieces of clothing from your partner and keep them off for the next two turns.",
+          "Put your hand inside her underwear and keep it there for 30 seconds.",
+          "Make her come as close as possible to climax using only your hands (stop before).",
+          "Kiss and suck on her most sensitive area for 40 seconds.",
+          "Take full control: position her how you want and touch her for one full minute."
+        ],
+        female: [
+          "Remove two pieces of clothing from your partner and keep them off for the next two turns.",
+          "Put your hand inside his underwear and keep it there for 30 seconds.",
+          "Make him come as close as possible to climax using only your hands (stop before).",
+          "Kiss and suck on his most sensitive area for 40 seconds.",
+          "Take full control: position him how you want and touch him for one full minute."
+        ]
+      }
+    }
+  },
+
+  srdp: {
+    truth: {
+      casual: {
+        male: [
+          "Say one wholesome quality you notice about the other couple as a pair.",
+          "Mention one way the other couple seems emotionally connected.",
+          "Say one positive vibe you feel when you see the other couple interact.",
+          "Share one thing you respect about how the other couple communicates.",
+          "Say one trait you admire in the other woman."
+        ],
+        female: [
+          "Say one wholesome quality you notice about the other couple as a pair.",
+          "Mention one way the other couple seems emotionally connected.",
+          "Say one positive vibe you feel when you see the other couple interact.",
+          "Share one thing you respect about how the other couple communicates.",
+          "Say one trait you admire in the other man."
+        ]
+      },
+      hot: {
+        male: [
+          "Say one hot but respectful thing you notice about the other woman’s body language.",
+          "Mention one confident or attractive energy the other woman gives off.",
+          "Say one way the other couple’s closeness feels appealing.",
+          "Share one thing that makes the other woman look physically desirable.",
+          "Say one attractive quality you notice in the other woman."
+        ],
+        female: [
+          "Say one hot but respectful thing you notice about the other man’s body language.",
+          "Mention one confident or attractive energy the other man gives off.",
+          "Say one way the other couple’s closeness feels appealing.",
+          "Share one thing that makes the other man look physically desirable.",
+          "Say one attractive quality you notice in the other man."
+        ]
+      },
+      wild: {
+        male: [
+          "Tell the group which part of the other woman’s body has caught your attention the most.",
+          "Describe one thing you would like to do with the other woman if given the chance.",
+          "Say what kind of touch from the other woman would turn you on the most.",
+          "Share a fantasy involving the other woman that has crossed your mind tonight.",
+          "Tell the group how it would feel to kiss the other woman right now."
+        ],
+        female: [
+          "Tell the group which part of the other man’s body has caught your attention the most.",
+          "Describe one thing you would like to do with the other man if given the chance.",
+          "Say what kind of touch from the other man would turn you on the most.",
+          "Share a fantasy involving the other man that has crossed your mind tonight.",
+          "Tell the group how it would feel to kiss the other man right now."
+        ]
+      },
+      extreme: {
+        male: [
+          "Describe in detail what you would do to the other woman if you had 5 minutes alone with her.",
+          "Tell the group exactly where you want the other woman’s mouth on your body.",
+          "Say what kind of sexual act with the other woman you are most curious about right now.",
+          "Describe the dirtiest thing you want to happen with the other woman tonight.",
+          "Tell the group how you want the other woman to use her hands on you."
+        ],
+        female: [
+          "Describe in detail what you would do to the other man if you had 5 minutes alone with him.",
+          "Tell the group exactly where you want the other man’s mouth on your body.",
+          "Say what kind of sexual act with the other man you are most curious about right now.",
+          "Describe the dirtiest thing you want to happen with the other man tonight.",
+          "Tell the group how you want the other man to use his hands on you."
+        ]
+      }
+    },
+    dare: {
+      casual: {
+        male: [
+          "Compliment the other woman on something non-physical.",
+          "Hold eye contact with the other woman for 10 full seconds.",
+          "Sit closer to the other couple for the rest of this round.",
+          "Give the other woman a friendly hug.",
+          "Touch the other woman lightly on the arm or shoulder."
+        ],
+        female: [
+          "Compliment the other man on something non-physical.",
+          "Hold eye contact with the other man for 10 full seconds.",
+          "Sit closer to the other couple for the rest of this round.",
+          "Give the other man a friendly hug.",
+          "Touch the other man lightly on the arm or shoulder."
+        ]
+      },
+      hot: {
+        male: [
+          "Kiss the other woman on the cheek.",
+          "Hold the other woman’s hand for 20 seconds.",
+          "Whisper something flirty into the other woman’s ear.",
+          "Run your fingers slowly along the other woman’s arm.",
+          "Kiss the other woman softly on the neck for 10 seconds."
+        ],
+        female: [
+          "Kiss the other man on the cheek.",
+          "Hold the other man’s hand for 20 seconds.",
+          "Whisper something flirty into the other man’s ear.",
+          "Run your fingers slowly along the other man’s arm.",
+          "Kiss the other man softly on the neck for 10 seconds."
+        ]
+      },
+      wild: {
+        male: [
+          "Kiss the other woman deeply for 20 seconds.",
+          "Remove one item of clothing from the other woman (with consent).",
+          "Put your hand under the other woman’s shirt and keep it there for 20 seconds.",
+          "Let the other woman kiss and lick your neck for 30 seconds.",
+          "Take the other woman’s hand and place it where you want it most."
+        ],
+        female: [
+          "Kiss the other man deeply for 20 seconds.",
+          "Remove one item of clothing from the other man (with consent).",
+          "Put your hand under the other man’s shirt and keep it there for 20 seconds.",
+          "Let the other man kiss and lick your neck for 30 seconds.",
+          "Take the other man’s hand and place it where you want it most."
+        ]
+      },
+      extreme: {
+        male: [
+          "Kiss and touch the other woman’s breasts for 30 seconds (clothing optional).",
+          "Remove two items of clothing from the other woman and keep them off for two turns.",
+          "Put your hand inside the other woman’s underwear and keep it there for 30 seconds.",
+          "Make the other woman moan using only your mouth on her neck, ears or breasts.",
+          "Use your mouth on the other woman’s most sensitive area for 30 seconds."
+        ],
+        female: [
+          "Kiss and touch the other man’s cock for 30 seconds (clothing optional).",
+          "Remove two items of clothing from the other man and keep them off for two turns.",
+          "Put your hand inside the other man’s underwear and keep it there for 30 seconds.",
+          "Make the other man moan using only your mouth on his neck, ears or chest.",
+          "Use your mouth on the other man’s most sensitive area for 30 seconds."
+        ]
+      }
+    }
+  }
+};
+
+document.querySelectorAll('.mode-option').forEach(el => {
+  el.addEventListener('click', function() {
+    document.querySelectorAll('.mode-option').forEach(o => o.classList.remove('selected'));
+    this.classList.add('selected');
+    mode = this.dataset.mode;
+    document.getElementById('consentText').innerHTML = mode === 'srsp'
+      ? "Same room • Same partner only • No swapping"
+      : "Same room • Different partner actions allowed • Soft-swap & full interaction OK with consent";
+  });
+});
+
+document.querySelectorAll('.mood-option').forEach(el => {
+  el.addEventListener('click', function() {
+    document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+    this.classList.add('selected');
+    mood = this.dataset.mood;
+  });
+});
+
+addPlayer();
+addPlayer();
+
+function addPlayer() {
+  players.push({ name: "", gender: "male", truths: 0, dares: 0 });
+  renderPlayers();
+}
+
+function renderPlayers() {
+  const container = document.getElementById("players");
+  container.innerHTML = "";
+  players.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.className = "player-row";
+    div.innerHTML = `
+      <input placeholder="Name" value="${p.name}" onchange="players[${i}].name=this.value">
+      <select onchange="players[${i}].gender=this.value">
+        <option value="male" ${p.gender==='male'?'selected':''}>Male</option>
+        <option value="female" ${p.gender==='female'?'selected':''}>Female</option>
+      </select>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function startGame() {
+  players = players.filter(p => p.name.trim());
+  if (players.length < 2) {
+    alert("Add at least 2 participants");
+    return;
+  }
+  mode = document.querySelector('.mode-option.selected').dataset.mode;
+  mood = document.querySelector('.mood-option.selected').dataset.mood;
+
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("turn").classList.remove("hidden");
+  updateModeBadge();
+  nextTurn();
+}
+
+function updateModeBadge() {
+  const text = mode === 'srsp' ? "🔒 Mode: SRSP (Same Partner)" : "🔥 Mode: SRDP (Different Partner)";
+  document.getElementById("modeBadge").innerText = text;
+  document.getElementById("modeBadge2").innerText = text;
+}
+
+function nextTurn() {
+  document.getElementById("promptScreen").classList.add("hidden");
+  document.getElementById("turn").classList.remove("hidden");
+
+  let i;
+  do { i = Math.floor(Math.random() * players.length); }
+  while (i === lastIndex && players.length > 1);
+
+  lastIndex = i;
+  currentIndex = i;
+  turnCount++;
+
+  const p = players[i];
+  const genderTag = p.gender === 'male'
+    ? '<span class="gender-tag male">♂ Male</span>'
+    : '<span class="gender-tag female">♀ Female</span>';
+
+  document.getElementById("turnCounter").innerText = "Round " + turnCount;
+  document.getElementById("currentPlayer").innerHTML = p.name + " " + genderTag;
+  updateScoreTable();
+}
+
+function choose(type) {
+  const p = players[currentIndex];
+  const list = prompts[mode][type][mood][p.gender];
+  const prompt = list[Math.floor(Math.random() * list.length)];
+
+  if (type === 'truth') p.truths++;
+  else p.dares++;
+
+  document.getElementById("promptText").innerText = prompt;
+  document.getElementById("turn").classList.add("hidden");
+  document.getElementById("promptScreen").classList.remove("hidden");
+  updateScoreTable();
+}
+
+function updateScoreTable() {
+  const tbody = document.getElementById("scoreTable");
+  tbody.innerHTML = "";
+  players.forEach(p => {
+    tbody.innerHTML += `<tr>
+      <td>${p.name}</td>
+      <td>${p.truths}</td>
+      <td>${p.dares}</td>
+      <td>${p.truths + p.dares}</td>
+    </tr>`;
+  });
+}
+
+function backToSetup() {
+  document.getElementById("turn").classList.add("hidden");
+  document.getElementById("promptScreen").classList.add("hidden");
+  document.getElementById("setup").classList.remove("hidden");
+  turnCount = 0;
+  lastIndex = -1;
+  players.forEach(p => { p.truths = 0; p.dares = 0; });
+}
+</script>
+</body>
+</html>
