@@ -5,180 +5,191 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Private Game Night – Dual Mode</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --bg-color: #121010;
+    --card-bg: rgba(28, 24, 24, 0.7);
+    --border-color: rgba(212, 163, 115, 0.15);
+    --border-hover: rgba(212, 163, 115, 0.4);
+    --text-primary: #f5f0eb;
+    --text-secondary: #b8aba2;
+    --accent-gold: #d4a373;
+  }
 
   body {
     margin: 0;
-    font-family: 'Cormorant Garamond', serif;
-    background: linear-gradient(160deg, #0d0015, #1a0029, #2a003f);
-    color: #ffe6f2;
+    font-family: 'Plus Jakarta+Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
-    position: relative;
-    overflow-x: hidden;
+    padding: 60px 20px;
+    box-sizing: border-box;
   }
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: 
-      radial-gradient(circle at 15% 80%, rgba(255, 45, 149, 0.12) 0%, transparent 40%),
-      radial-gradient(circle at 85% 20%, rgba(180, 0, 120, 0.15) 0%, transparent 40%);
-    pointer-events: none;
-  }
-
-  .container {
-    position: relative;
+  .wrapper {
     width: 100%;
-    max-width: 900px;
-    aspect-ratio: 1 / 1.15;
-    z-index: 1;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 50px;
   }
 
   h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.7rem;
-    text-align: center;
-    margin-bottom: 6px;
-    color: #ffd1a0;
-    text-shadow: 0 0 25px rgba(255, 45, 149, 0.45);
-    letter-spacing: 2px;
-    position: absolute;
-    top: -75px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    margin: 0 0 12px 0;
+    color: var(--text-primary);
   }
 
   .subtitle {
-    position: absolute;
-    top: -28px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    text-align: center;
-    font-size: 1.05rem;
-    color: #ff9ec8;
-    letter-spacing: 1px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 300;
   }
 
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    width: 100%;
+  }
+
+  /* Make the first two cards on the bottom row center nicely or span */
   .game-card {
-    position: absolute;
-    width: 255px;
-    background: rgba(25, 5, 35, 0.85);
-    backdrop-filter: blur(14px);
-    border-radius: 22px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255, 45, 149, 0.3);
-    transition: transform 0.45s ease, box-shadow 0.45s ease, z-index 0.3s;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
   }
 
   .game-card:hover {
-    transform: scale(1.12) !important;
-    box-shadow: 0 20px 60px rgba(255, 45, 149, 0.55);
-    z-index: 30 !important;
+    transform: translateY(-6px);
+    border-color: var(--border-hover);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .card-image-wrapper {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
   }
 
   .game-card img {
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
-    filter: brightness(0.85) contrast(1.1);
+    filter: brightness(0.9) contrast(1.05);
+    transition: transform 0.5s ease;
+  }
+
+  .game-card:hover img {
+    transform: scale(1.04);
   }
 
   .game-title {
-    padding: 16px;
+    padding: 20px 16px;
     text-align: center;
-    font-size: 1.35rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, #ff2d95, #c4007a);
-    color: white;
-    letter-spacing: 0.5px;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    background: transparent;
   }
 
-  #center { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 290px; z-index: 5; }
-  #top { top: 4%; left: 50%; transform: translateX(-50%); z-index: 4; }
-  #bottom { bottom: 4%; left: 50%; transform: translateX(-50%); z-index: 4; }
-  #left { left: 2%; top: 50%; transform: translateY(-50%); z-index: 4; }
-  #right { right: 2%; top: 50%; transform: translateY(-50%); z-index: 4; }
-
-  @keyframes float {
-    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
-    50% { transform: translate(-50%, -50%) translateY(-16px); }
+  /* Spanning layout adjustments for 5 cards */
+  .game-card:nth-child(4) {
+    grid-column: 1 / 2;
   }
-  @keyframes float-top {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-12px); }
+  .game-card:nth-child(5) {
+    grid-column: 3 / 4;
   }
-  @keyframes float-bottom {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(12px); }
+  
+  .bottom-row-wrapper {
+    display: contents;
   }
-  @keyframes float-left {
-    0%, 100% { transform: translateY(-50%) translateX(0); }
-    50% { transform: translateY(-50%) translateX(-10px); }
-  }
-  @keyframes float-right {
-    0%, 100% { transform: translateY(-50%) translateX(0); }
-    50% { transform: translateY(-50%) translateX(10px); }
-  }
-
-  #center { animation: float 8s ease-in-out infinite; }
-  #top { animation: float-top 9s ease-in-out infinite; }
-  #bottom { animation: float-bottom 10s ease-in-out infinite; }
-  #left { animation: float-left 9.5s ease-in-out infinite; }
-  #right { animation: float-right 8.5s ease-in-out infinite; }
 
   @media (max-width: 900px) {
-    .container { aspect-ratio: auto; height: auto; }
-    h1 { position: static; transform: none; margin-bottom: 6px; font-size: 2.2rem; }
-    .subtitle { position: static; transform: none; margin-bottom: 28px; }
-    .game-card {
-      position: static;
-      width: 90%;
-      max-width: 320px;
-      margin: 28px auto;
-      transform: none !important;
-      animation: none !important;
+    .grid-container {
+      grid-template-columns: repeat(2, 1fr);
     }
-    #center { width: 90%; max-width: 340px; }
+    .game-card:nth-child(4),
+    .game-card:nth-child(5) {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .grid-container {
+      grid-template-columns: 1fr;
+    }
+    h1 {
+      font-size: 2.2rem;
+    }
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>Private Game Night</h1>
-  <div class="subtitle">SRSP &amp; SRDP • Gender-Aware • Consent First</div>
 
-  <div class="game-card" id="top" onclick="go('Truthdare.html')">
-    <img src="https://www.wikihow.com/images/thumb/1/1e/Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg/v4-728px-Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg" alt="Truth or Dare">
-    <div class="game-title">Truth or Dare Ladder</div>
-  </div>
+<div class="wrapper">
+  <header>
+    <h1>Private Game Night</h1>
+    <div class="subtitle">SRSP &amp; SRDP &bull; Gender-Aware &bull; Consent First</div>
+  </header>
 
-  <div class="game-card" id="left" onclick="go('dice.html')">
-    <img src="https://www.girlschase.com/images/sex-tactics.jpg" alt="Desire Dice">
-    <div class="game-title">Desire Dice</div>
-  </div>
+  <div class="grid-container">
+    <div class="game-card" onclick="go('Truthdare.html')">
+      <div class="card-image-wrapper">
+        <img src="https://www.wikihow.com/images/thumb/1/1e/Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg/v4-728px-Intimate-Questions-to-Ask-Your-Partner-Step-9-Version-2.jpg" alt="Truth or Dare">
+      </div>
+      <div class="game-title">Truth or Dare Ladder</div>
+    </div>
 
-  <div class="game-card" id="center" onclick="go('connection.html')">
-    <img src="https://www.developgoodhabits.com/wp-content/uploads/2020/02/questions-couples-fantasy.png" alt="Connection Questions">
-    <div class="game-title">Connection Questions</div>
-  </div>
+    <div class="game-card" onclick="go('dice.html')">
+      <div class="card-image-wrapper">
+        <img src="https://www.girlschase.com/images/sex-tactics.jpg" alt="Desire Dice">
+      </div>
+      <div class="game-title">Desire Dice</div>
+    </div>
 
-  <div class="game-card" id="right" onclick="go('secret.html')">
-    <img src="https://i.etsystatic.com/62191748/r/il/870382/7303613538/il_fullxfull.7303613538_m7zg.jpg" alt="Secret Challenge">
-    <div class="game-title">Secret Challenge</div>
-  </div>
+    <div class="game-card" onclick="go('connection.html')">
+      <div class="card-image-wrapper">
+        <img src="https://www.developgoodhabits.com/wp-content/uploads/2020/02/questions-couples-fantasy.png" alt="Connection Questions">
+      </div>
+      <div class="game-title">Connection Questions</div>
+    </div>
 
-  <div class="game-card" id="bottom" onclick="go('tempo.html')">
-    <img src="https://helios-i.mashable.com/imagery/articles/06vhR6V3ub2Qfp3quuSkbuo/hero-image.fill.size_1248x702.v1623389712.jpg" alt="Tempo Game">
-    <div class="game-title">Tempo Game</div>
+    <div class="game-card" onclick="go('secret.html')">
+      <div class="card-image-wrapper">
+        <img src="https://i.etsystatic.com/62191748/r/il/870382/7303613538/il_fullxfull.7303613538_m7zg.jpg" alt="Secret Challenge">
+      </div>
+      <div class="game-title">Secret Challenge</div>
+    </div>
+
+    <div class="game-card" onclick="go('tempo.html')">
+      <div class="card-image-wrapper">
+        <img src="https://helios-i.mashable.com/imagery/articles/06vhR6V3ub2Qfp3quuSkbuo/hero-image.fill.size_1248x702.v1623389712.jpg" alt="Tempo Game">
+      </div>
+      <div class="game-title">Tempo Game</div>
+    </div>
   </div>
 </div>
 
